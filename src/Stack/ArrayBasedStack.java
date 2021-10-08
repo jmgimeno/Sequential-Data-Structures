@@ -47,5 +47,4 @@ public class ArrayBasedStack<E> implements BaseStack<E>{
         return stackArray.isEmpty();
     }
 
-
 }
