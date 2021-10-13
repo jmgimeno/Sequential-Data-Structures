@@ -2,11 +2,11 @@ package Stack;
 
 import java.util.ArrayList;
 
-public class ArrayBasedStack<E> implements BaseStack<E>{
+public class ArrayListStack<E> implements Stack<E>{
     private ArrayList<E> stackArray;
     private int topOfStack;
 
-    public ArrayBasedStack(){
+    public ArrayListStack(){
         stackArray = new ArrayList<>();
         topOfStack = - 1; //The first position will be 0
     }
