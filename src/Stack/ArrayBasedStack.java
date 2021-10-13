@@ -3,17 +3,17 @@ package Stack;
 import java.util.ArrayList;
 
 public class ArrayListStack<E> implements Stack<E>{
-    private ArrayList<E> stackArray;
+    private ArrayList<E> elements;
     private int topOfStack;
 
     public ArrayListStack(){
-        stackArray = new ArrayList<>();
+        elements = new ArrayList<>();
         topOfStack = - 1; //The first position will be 0
     }
 
     @Override
     public void push(E element){
-        stackArray.add(element);
+        elements.add(element);
         topOfStack++;
     }
 
@@ -22,8 +22,8 @@ public class ArrayListStack<E> implements Stack<E>{
         if(isEmpty()){
             throw new IllegalStateException("Empty Stack");
         }
-        E res = stackArray.get(topOfStack);
-        stackArray.remove(topOfStack);
+        E res = elements.get(topOfStack);
+        elements.remove(topOfStack);
         topOfStack--;
         return res;
     }
@@ -33,17 +33,17 @@ public class ArrayListStack<E> implements Stack<E>{
         if(isEmpty()){
             throw new IllegalStateException("Empty Stack");
         }
-        E res = stackArray.get(topOfStack);
+        E res = elements.get(topOfStack);
         return res;
     }
 
     @Override
     public int size(){
-        return stackArray.size();
+        return elements.size();
     }
 
     @Override
     public boolean isEmpty(){
-        return stackArray.isEmpty();
+        return elements.isEmpty();
     }
 }
