@@ -4,17 +4,14 @@ import java.util.ArrayList;
 
 public class ArrayListStack<E> implements Stack<E>{
     private ArrayList<E> elements;
-    private int topOfStack;
 
     public ArrayListStack(){
         elements = new ArrayList<>();
-        topOfStack = - 1; //The first position will be 0
     }
 
     @Override
     public void push(E element){
         elements.add(element);
-        topOfStack++;
     }
 
     @Override
@@ -22,9 +19,9 @@ public class ArrayListStack<E> implements Stack<E>{
         if(isEmpty()){
             throw new IllegalStateException("Empty Stack");
         }
-        E res = elements.get(topOfStack);
-        elements.remove(topOfStack);
-        topOfStack--;
+        int last = size() - 1;
+        E res = elements.get(last);
+        elements.remove(last);
         return res;
     }
 
@@ -33,7 +30,7 @@ public class ArrayListStack<E> implements Stack<E>{
         if(isEmpty()){
             throw new IllegalStateException("Empty Stack");
         }
-        E res = elements.get(topOfStack);
+        E res = elements.get(size() - 1);
         return res;
     }
 
