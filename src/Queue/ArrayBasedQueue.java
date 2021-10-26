@@ -61,13 +61,12 @@ public class ArrayBasedQueue<E> implements Queue<E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public E element() {
         E e = peek();
         if(e == null)
             throw new NoSuchElementException();
 
-        return (E) elements[head];
+        return e;
     }
 
     @Override
