@@ -43,8 +43,8 @@ public class ArrayListStack<E> implements Stack<E>{
     public int search(Object o){
         int i = lastIndexOf(o);
 
-        if(i < 0) {
-            return elements.size() - i;
+        if(i >= 0) {
+            return elements.size() - 1 - i;
         }
         return -1;
     }
