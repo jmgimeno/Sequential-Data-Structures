@@ -1,60 +1,46 @@
 package Stack;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
-public class ArrayListStack<E> implements Stack<E>{
-    private ArrayList<E> elements;
+public class ArrayListStack<E> implements Stack<E> {
+    private final ArrayList<E> elements;
 
-    public ArrayListStack(){
+    public ArrayListStack() {
         elements = new ArrayList<>();
     }
 
     @Override
-    public void push(E element){
+    public void push(E element) {
         elements.add(element);
     }
 
     @Override
-    public E pop(){
-        if(empty()){
-            throw new IllegalStateException("Empty Stack");
+    public E pop() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Empty Stack");
         }
-        int last = elements.size() - 1;
-        E res = elements.get(last);
-        elements.remove(last);
+        int lastPos = elements.size() - 1;
+        E res = elements.get(lastPos);
+        elements.remove(lastPos);
         return res;
     }
 
     @Override
-    public E peek(){
-        if(empty()){
-            throw new IllegalStateException("Empty Stack");
+    public E top() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Empty Stack");
         }
-        E res = elements.get(elements.size() - 1);
-        return res;
+        return elements.get(elements.size() - 1);
     }
 
     @Override
-    public boolean empty(){
+    public boolean isEmpty() {
         return elements.isEmpty();
     }
 
     @Override
-    public int search(Object o){
-        if (o == null) {
-            for (int i = elements.size() - 1; i >=  0; i--) {
-                if (elements.get(i) == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = elements.size() - 1; i >=  0; i--) {
-                if (o.equals(elements.get(i))) {
-                    return i;
-                }
-            }
-        }
-        return -1;
+    public int size() {
+        return elements.size();
     }
-
 }
