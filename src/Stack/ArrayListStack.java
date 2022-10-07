@@ -41,15 +41,6 @@ public class ArrayListStack<E> implements Stack<E>{
 
     @Override
     public int search(Object o){
-        int i = lastIndexOf(o);
-
-        if(i >= 0) {
-            return elements.size() - 1 - i;
-        }
-        return -1;
-    }
-
-    private int lastIndexOf(Object o){
         if (o == null) {
             for (int i = elements.size() - 1; i >=  0; i--) {
                 if (elements.get(i) == null) {
@@ -65,4 +56,5 @@ public class ArrayListStack<E> implements Stack<E>{
         }
         return -1;
     }
+
 }
