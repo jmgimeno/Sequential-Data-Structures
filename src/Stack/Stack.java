@@ -3,9 +3,12 @@ package Stack;
 import java.util.NoSuchElementException;
 
 /**
- * A linear collection that only supports element insertion and removal at the top of it. Concretely, it is a last-in-first-out (LIFO) stack of objects.
+ * A linear collection that only supports element insertion and removal at the top of it. 
+ * Concretely, it is a last-in-first-out (LIFO) stack of objects.
  *
- * <p> Methods are provided to insert an element in the top, to obtain or to obtain and remove the top of the stack, to know if the stack is empty and, to know the number of elements in the collection.</p>
+ * Methods are provided to insert an element in the top, to obtain or to obtain and remove
+ * the top of the stack, to know if the stack is empty and, to know the number of elements 
+ * in the collection.
  *
  * @author Juan Enrique and Juan Manuel
  *
