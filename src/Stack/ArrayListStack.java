@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  * Implementation of the {@link Stack} interface using contiguous memory positions
  * through an {@link ArrayList}.
  *
- * Methods are provided to insert an element in the top, to obtain or to obtain and remove
+ * Methods are provided to insert an element in the top of the stack, to obtain or to obtain and remove
  * the top of the stack, to know if the stack is empty and, to know the number of elements
  * in the collection.
  *

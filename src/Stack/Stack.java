@@ -18,14 +18,19 @@ import java.util.NoSuchElementException;
 public interface Stack<E> {
 
     /**
-     * Pushes an item in the top of the stack. If there is no space, it throws an {@code IllegalStateException}.
+     * Pushes an item in the top of the stack.
+     * If there is no space, it throws an {@code IllegalStateException}.
+     *
+     * @param element the element to be added.
      *
      * @throws IllegalStateException if the item cannot be pushed due to capacity restrictions.
+     *
      * */
     void push(E element);
 
     /**
      * Returns and eliminates the item which is in the top of the stack.
+     * If the stack is empty, it throws a {@code NoSuchElementException}.
      *
      * @return the element which is in the top of the stack.
      *
@@ -35,6 +40,7 @@ public interface Stack<E> {
 
     /**
      * Returns the element which is in the top of the stack.
+     * If the stack is empty, it throws a {@code NoSuchElementException}.
      *
      * @return the element which is in the top of the stack.
      *

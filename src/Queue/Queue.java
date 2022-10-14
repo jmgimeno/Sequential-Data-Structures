@@ -1,20 +1,79 @@
 package Queue;
 
+import java.util.NoSuchElementException;
 
 /**
- * First-In-First-Out (FIFO) collection. In other words, a collection in which the elements are processed in order of arrival.
+ * First-In-First-Out (FIFO) collection. In other words, a collection in which the elements
+ * are processed in order of arrival.
  *
- * <p> Methods are provided to insert an element in the collection and to obtain or to obtain and remove the head of the queue.</p>
+ * Methods are provided to insert an element in the collection (as last) and to obtain or
+ * to obtain and remove the head of the queue.
  *
  * @author Juan Enrique and Juan Manuel
  *
  * @param <E> defines the type of the elements in the Queue
  */
 public interface Queue<E> {
+
+    /**
+     * Inserts the specified element into the queue, returning {@code true} upon success.
+     * If there is no space available, it throws an {@code IllegalStateException}.
+     *
+     * @param e the element to be inserted.
+     *
+     * @return true if the element has been added to this queue.
+     *
+     * @throws IllegalStateException if the item cannot be added due to capacity restrictions.
+     *
+     */
     boolean add(E e);
-    E element();
+
+    /**
+     * Inserts the specified element into the queue, returning {@code true} upon success.
+     *
+     * @param e the element to be inserted.
+     *
+     * @return true if the element has been added to this queue, else false.
+     *
+     */
     boolean offer (E e);
+
+    /**
+     * Returns, but does not remove, the head of this queue.
+     * If the queue is empty, the method throws a {@code NoSuchElementException}.
+     *
+     * @return the head of this queue.
+     *
+     * @throws NoSuchElementException if the queue is empty.
+     */
+    E element();
+
+    /**
+     * Returns, but does not remove, the head of this queue.
+     * If the queue is empty, the method returns null.
+     *
+     * @return the head of this queue. If the queue is empty, the method returns null.
+     *
+     */
     E peek();
+
+    /**
+     * Returns and removes the head of this queue.
+     * If the queue is empty, the method returns null.
+     *
+     * @return the head of this queue. If the queue is empty, the method returns null.
+     */
     E poll();
+
+    /**
+     * Returns and removes the head of this queue.
+     * If the queue is empty, it throws a {@code NoSuchElementException}.
+     *
+     * @return the head of this queue.
+     *
+     * @throws NoSuchElementException if the queue is empty.
+     *
+     */
     E remove();
+
 }

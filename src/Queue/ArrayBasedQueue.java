@@ -1,22 +1,75 @@
 package Queue;
 
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+/**
+ * Implementation of the {@link Queue} interface using non-contiguous memory positions
+ * through an array.
+ *
+ * Methods are provided to insert an element at the end of the queue, to obtain or to obtain and remove
+ * the head of the queue, to know if the queue is empty and, to know the number of elements
+ * in the collection.
+ *
+ * @author Juan Enrique and Juan Manuel
+ *
+ * @param <E> defines the type of the elements in the ArrayListBasedQueue
+ */
 public class ArrayBasedQueue<E> implements Queue<E> {
-    private Object[] elements;  // Array in which the elements of the queue are stored
-    private int head = 0; // The index of the head
-    private int size = 0; // Number of elements in the queue
 
+    /**
+     * Array in which the elements of the queue are stored.
+     *
+     * */
+    private Object[] elements;
+
+    /**
+     * Index of the head.
+     *
+     * */
+    private int head = 0;
+
+    /**
+     * Number of elements in the queue.
+     *
+     * */
+    private int size = 0;
+
+    /**
+     * Default capacity.
+     *
+     * */
     private static final int DEFAULT_CAPACITY = 10;
 
+    /**
+     * Constructs an empty ArrayBasedQueue with default capacity.
+     *
+     * */
     public ArrayBasedQueue() {
         elements = new Object[DEFAULT_CAPACITY];
     }
 
+    /**
+     * Constructs an empty ArrayBasedQueue with the specified capacity.
+     *
+     * @param capacity the capacity of the ArrayBasedQueue.
+     *
+     * */
     public ArrayBasedQueue(int capacity) {
         elements = new Object[(capacity < 1) ? 1 : capacity];
     }
 
+    /**
+     * Inserts the specified element into the queue, returning {@code true} upon success.
+     * If there is no space available, it throws an {@code IllegalStateException}.
+     *
+     * @param e the element to be inserted.
+     *
+     * @return true if the element has been added to this queue.
+     *
+     * @throws IllegalStateException if the item cannot be added due to capacity restrictions.
+     *
+     */
     @Override
     public boolean add(E e) {
         if(!offer(e))
@@ -25,6 +78,14 @@ public class ArrayBasedQueue<E> implements Queue<E> {
         return true;
     }
 
+    /**
+     * Inserts the specified element into the queue, returning {@code true} upon success.
+     *
+     * @param e the element to be inserted.
+     *
+     * @return true if the element has been added to this queue, else false.
+     *
+     */
     @Override
     public boolean offer(E e) {
         if(size == elements.length)
@@ -37,15 +98,45 @@ public class ArrayBasedQueue<E> implements Queue<E> {
         return true;
     }
 
+    /**
+     * Returns, but does not remove, the head of this queue.
+     * If the queue is empty, the method throws a {@code NoSuchElementException}.
+     *
+     * @return the head of this queue.
+     *
+     * @throws NoSuchElementException if the queue is empty.
+     */
     @Override
-    public E remove() {
-        E e = poll();
+    public E element() {
+        E e = peek();
         if(e == null)
             throw new NoSuchElementException();
 
         return e;
     }
 
+    /**
+     * Returns, but does not remove, the head of this queue.
+     * If the queue is empty, the method returns null.
+     *
+     * @return the head of this queue. If the queue is empty, the method returns null.
+     *
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public E peek() {
+        if(size == 0)
+            return null;
+
+        return (E) elements[head];
+    }
+
+    /**
+     * Returns and removes the head of this queue.
+     * If the queue is empty, the method returns null.
+     *
+     * @return the head of this queue. If the queue is empty, the method returns null.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public E poll() {
@@ -60,22 +151,22 @@ public class ArrayBasedQueue<E> implements Queue<E> {
         }
     }
 
+    /**
+     * Returns and removes the head of this queue.
+     * If the queue is empty, it throws a {@code NoSuchElementException}.
+     *
+     * @return the head of this queue.
+     *
+     * @throws NoSuchElementException if the queue is empty.
+     *
+     */
     @Override
-    public E element() {
-        E e = peek();
+    public E remove() {
+        E e = poll();
         if(e == null)
             throw new NoSuchElementException();
 
         return e;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public E peek() {
-        if(size == 0)
-            return null;
-
-        return (E) elements[head];
     }
 
 }
