@@ -1,88 +1,53 @@
-package Queue;
+package queue;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /**
  * Implementation of the {@link Queue} interface using non-contiguous memory positions
- * through an array.
+ * through a {@link LinkedList}.
  * <p>
  * Methods are provided to insert an element at the end of the queue, to obtain or to obtain and
  * remove
  * the head of the queue, to know if the queue is empty and, to know the number of elements
  * in the collection.
  *
- * @param <E> defines the type of the elements in the ArrayListBasedQueue
+ * @param <E> defines the type of the elements in the LinkedListBasedQueue
  * @author Juan Enrique and Juan Manuel
  */
-public class ArrayBasedQueue<E> implements Queue<E> {
+public class LinkedListBasedQueue<E> implements Queue<E> {
+    /**
+     * The LinkedList in which the elements of the queue are stored.
+     */
+    private final LinkedList<E> elements;
 
     /**
-     * Array in which the elements of the queue are stored.
+     * Constructs an empty LinkedListBasedQueue.
      */
-    private Object[] elements;
-
-    /**
-     * Index of the head.
-     */
-    private int head = 0;
-
-    /**
-     * Number of elements in the queue.
-     */
-    private int size = 0;
-
-    /**
-     * Default capacity.
-     */
-    private static final int DEFAULT_CAPACITY = 10;
-
-    /**
-     * Constructs an empty ArrayBasedQueue with default capacity.
-     */
-    public ArrayBasedQueue() {
-        elements = new Object[DEFAULT_CAPACITY];
-    }
-
-    /**
-     * Constructs an empty ArrayBasedQueue with the specified capacity.
-     *
-     * @param capacity the capacity of the ArrayBasedQueue.
-     */
-    public ArrayBasedQueue(int capacity) {
-        elements = new Object[(capacity < 1) ? 1 : capacity];
+    public LinkedListBasedQueue() {
+        elements = new LinkedList<>();
     }
 
     /**
      * Inserts the specified element into the queue, returning {@code true} upon success.
-     * If there is no space available, it throws an {@code IllegalStateException}.
      *
      * @param e the element to be inserted.
-     * @return true if the element has been added to this queue.
-     * @throws IllegalStateException if the item cannot be added due to capacity restrictions.
+     * @return true when the element has been added to this queue.
      */
     @Override
     public boolean add(E e) {
-        if (!offer(e))
-            throw new IllegalStateException("No free space");
-
-        return true;
+        return offer(e);
     }
 
     /**
      * Inserts the specified element into the queue, returning {@code true} upon success.
      *
      * @param e the element to be inserted.
-     * @return true if the element has been added to this queue, else false.
+     * @return true when the element has been added to this queue.
      */
     @Override
     public boolean offer(E e) {
-        if (size == elements.length)
-            return false;
-        else {
-            elements[(head + size) % elements.length] = e;
-            size++;
-        }
+        elements.addLast(e);
 
         return true;
     }
@@ -110,12 +75,11 @@ public class ArrayBasedQueue<E> implements Queue<E> {
      * @return the head of this queue. If the queue is empty, the method returns null.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public E peek() {
-        if (size == 0)
+        if (elements.isEmpty())
             return null;
 
-        return (E) elements[head];
+        return elements.getFirst();
     }
 
     /**
@@ -126,16 +90,10 @@ public class ArrayBasedQueue<E> implements Queue<E> {
      */
     @Override
     public E poll() {
-        if (size == 0)
+        if (elements.isEmpty())
             return null;
-        else {
-            @SuppressWarnings("unchecked")
-            E e = (E) elements[head];
-            elements[head] = null;
-            head = (head + 1) % elements.length;
-            size--;
-            return e;
-        }
+        else
+            return elements.removeFirst();
     }
 
     /**
@@ -153,5 +111,4 @@ public class ArrayBasedQueue<E> implements Queue<E> {
 
         return e;
     }
-
 }
