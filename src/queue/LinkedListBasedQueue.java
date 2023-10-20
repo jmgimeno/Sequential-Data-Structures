@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /**
- * Implementation of the {@link Queue} interface using non-contiguous memory positions
+ * Implementation of the {@link queue} interface using non-contiguous memory positions
  * through a {@link LinkedList}.
  * <p>
  * Methods are provided to insert an element at the end of the queue, to obtain or to obtain and
