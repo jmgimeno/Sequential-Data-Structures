@@ -66,4 +66,17 @@ public interface Queue<E> {
      */
     E remove();
 
+    /**
+     * Tests if the queue is empty.
+     *
+     * @return {@code true} if the queue does not contain items. Otherwise, {@code false}.
+     */
+    boolean isEmpty();
+
+    /**
+     * Returns the number of items in the queue.
+     *
+     * @return the number of items in the queue.
+     */
+    int size();
 }

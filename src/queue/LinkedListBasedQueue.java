@@ -1,7 +1,6 @@
 package queue;
 
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 /**
  * Implementation of the {@link queue} interface using non-contiguous memory positions
@@ -15,7 +14,7 @@ import java.util.NoSuchElementException;
  * @param <E> defines the type of the elements in the LinkedListBasedQueue
  * @author Juan Enrique and Juan Manuel
  */
-public class LinkedListBasedQueue<E> implements Queue<E> {
+public class LinkedListBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
     /**
      * The LinkedList in which the elements of the queue are stored.
      */
@@ -52,21 +51,6 @@ public class LinkedListBasedQueue<E> implements Queue<E> {
         return true;
     }
 
-    /**
-     * Returns, but does not remove, the head of this queue.
-     * If the queue is empty, the method throws a {@code NoSuchElementException}.
-     *
-     * @return the head of this queue.
-     * @throws NoSuchElementException if the queue is empty.
-     */
-    @Override
-    public E element() {
-        E e = peek();
-        if (e == null)
-            throw new NoSuchElementException();
-
-        return e;
-    }
 
     /**
      * Returns, but does not remove, the head of this queue.
@@ -97,18 +81,12 @@ public class LinkedListBasedQueue<E> implements Queue<E> {
     }
 
     /**
-     * Returns and removes the head of this queue.
-     * If the queue is empty, it throws a {@code NoSuchElementException}.
+     * Returns the number of items in the queue.
      *
-     * @return the head of this queue.
-     * @throws NoSuchElementException if the queue is empty.
+     * @return the number of items in the queue.
      */
     @Override
-    public E remove() {
-        E e = poll();
-        if (e == null)
-            throw new NoSuchElementException();
-
-        return e;
+    public int size() {
+        return elements.size();
     }
 }
