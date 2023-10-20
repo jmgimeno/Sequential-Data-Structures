@@ -19,7 +19,7 @@ class ArrayBasedQueueIteratorsTest {
     }
 
     @Test
-    void simpleIteration() {
+    void fullIteration() {
         // 0 --- head --- tail --- size --- capacity
         var elems = List.of(1, 2, 3, 4, 5);
         elems.forEach(queue::offer);
@@ -28,12 +28,24 @@ class ArrayBasedQueueIteratorsTest {
     }
 
     @Test
-    void complexIteration() {
+    void removedPrefixIteration() {
         var elems = List.of(1, 2, 3, 4, 5);
         elems.forEach(queue::offer);
         queue.poll();
         queue.poll();
         var iteration = new ArrayList<>(queue);
         assertEquals(List.of(3, 4, 5), iteration);
+    }
+
+    @Test
+    void removedPrefixAndAddedFullIteration() {
+        var elems = List.of(1, 2, 3, 4, 5);
+        elems.forEach(queue::offer);
+        queue.poll();
+        queue.poll();
+        queue.offer(6);
+        queue.offer(7);
+        var iteration = new ArrayList<>(queue);
+        assertEquals(List.of(3, 4, 5, 6, 7), iteration);
     }
 }
