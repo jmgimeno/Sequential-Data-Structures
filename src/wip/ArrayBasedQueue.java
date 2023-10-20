@@ -243,6 +243,8 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
                 size--;
             }
             lastRet = -1;
+            modCount++;
+            expectedModCount++;
         }
     }
 }
