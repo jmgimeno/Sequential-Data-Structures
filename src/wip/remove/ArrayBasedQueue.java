@@ -1,10 +1,6 @@
-package wip;
+package wip.remove;
 
-import java.util.AbstractQueue;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Implementation of the {@link Queue} interface using contiguous memory positions using a
@@ -179,7 +175,8 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
          */
         @Override
         public E next() {
-            checkForComodification();
+            if (modCount != expectedModCount)
+                throw new IllegalStateException("the queue has been modified");
             if (diffHead == size)
                 throw new NoSuchElementException();
             int cursor = head + diffHead;
@@ -213,12 +210,37 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
          */
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("remove() is not supported");
-        }
-
-        private void checkForComodification() {
             if (modCount != expectedModCount)
                 throw new IllegalStateException("the queue has been modified");
+            if (lastRet < 0)
+                throw new IllegalStateException("you should call next() before remove()");
+            if (head < tail) {
+                // 0 <= head  <= lastRet < tail <= elements.length
+                System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
+                elements[tail] = null;
+                tail--;
+                diffHead--;
+                size--;
+            } else if (head <= lastRet) {
+                // 0 <= tail <= head <= lastRet < elements.length
+                System.arraycopy(elements, lastRet + 1, elements, lastRet, elements.length - lastRet - 1);
+                elements[elements.length - 1] = elements[0];
+                System.arraycopy(elements, 1, elements, 0, tail - 1);
+                elements[tail] = null;
+                tail = tail == 0 ? elements.length - 1 : tail - 1;
+                diffHead--;
+                size--;
+            } else {
+                // 0 <= lastRet <= tail <= head < elements.length
+                System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
+                elements[tail] = null;
+                tail = tail == 0 ? elements.length - 1 : tail - 1;
+                diffHead--;
+                size--;
+            }
+            lastRet = -1;
+            modCount++;
+            expectedModCount++;
         }
     }
 }
