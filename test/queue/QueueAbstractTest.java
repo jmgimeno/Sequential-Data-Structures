@@ -3,11 +3,14 @@ package queue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-abstract class AbstractQueueTest {
-    protected Queue<String> queue;
+import java.util.Queue;
+
+abstract class QueueAbstractTest {
+
+    Queue<String> queue;
 
     @Test
-    public void testQueueSize() {
+    void testQueueSize() {
         Assertions.assertEquals(0, queue.size());
         queue.offer("Element 1");
         queue.offer("Element 2");
@@ -15,14 +18,14 @@ abstract class AbstractQueueTest {
     }
 
     @Test
-    public void testQueueIsEmpty() {
+    void testQueueIsEmpty() {
         Assertions.assertTrue(queue.isEmpty());
         queue.offer("Element 1");
         Assertions.assertFalse(queue.isEmpty());
     }
 
     @Test
-    public void testQueueOfferAndPoll() {
+    void testQueueOfferAndPoll() {
         queue.offer("Element 1");
         queue.offer("Element 2");
         Assertions.assertEquals("Element 1", queue.poll());
@@ -31,7 +34,7 @@ abstract class AbstractQueueTest {
 
     // Add more test methods as needed to cover other Queue interface methods
     @Test
-    public void testQueuePeek() {
+    void testQueuePeek() {
         queue.offer("Element 1");
         queue.offer("Element 2");
         Assertions.assertEquals("Element 1", queue.peek());
@@ -39,7 +42,7 @@ abstract class AbstractQueueTest {
     }
 
     @Test
-    public void testQueueElement() {
+    void testQueueElement() {
         queue.offer("Element 1");
         queue.offer("Element 2");
         Assertions.assertEquals("Element 1", queue.element());
@@ -47,7 +50,7 @@ abstract class AbstractQueueTest {
     }
 
     @Test
-    public void testQueueRemove() {
+    void testQueueRemove() {
         queue.offer("Element 1");
         queue.offer("Element 2");
         Assertions.assertEquals("Element 1", queue.remove());

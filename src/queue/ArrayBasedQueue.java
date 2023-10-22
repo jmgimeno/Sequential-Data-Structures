@@ -1,18 +1,28 @@
 package queue;
 
+import java.util.AbstractQueue;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Queue;
+
 /**
- * Implementation of the {@link queue} interface using non-contiguous memory positions
- * through an array.
+ * Implementation of the {@link Queue} interface using contiguous memory positions using a
+ * fixed-size array and not allowing {@code null} elements.
+ *
  * <p>
- * Methods are provided to insert an element at the end of the queue, to obtain or to obtain and
- * remove
- * the head of the queue, to know if the queue is empty and, to know the number of elements
- * in the collection.
+ * This implementation also shows how to use the abstract classes provided in the Java Collections
+ * Framework to simplify the implementation of a concrete class.
  *
  * @param <E> defines the type of the elements in the ArrayListBasedQueue
- * @author Juan Enrique and Juan Manuel
+ * @author Juan Enrique Garrido, Juan Manuel Gimeno
  */
 public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
+
+    /**
+     * Default capacity.
+     */
+    private static final int DEFAULT_CAPACITY = 10;
 
     /**
      * Array in which the elements of the queue are stored.
@@ -20,19 +30,25 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
     private final Object[] elements;
 
     /**
-     * Index of the head.
+     * Index of the head. Position of the element to be retrieved by {@link #poll()}.
      */
     private int head = 0;
+
+    /**
+     * Index of the tail. Position of the element to be inserted by {@link #offer(Object)}.
+     */
+    private int tail = 0;
 
     /**
      * Number of elements in the queue.
      */
     private int size = 0;
 
+
     /**
-     * Default capacity.
+     * Count of modifications to the queue.
      */
-    private static final int DEFAULT_CAPACITY = 10;
+    private int modCount = 0;
 
     /**
      * Constructs an empty ArrayBasedQueue with default capacity.
@@ -47,51 +63,69 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
      * @param capacity the capacity of the ArrayBasedQueue.
      */
     public ArrayBasedQueue(int capacity) {
-        elements = new Object[Math.max(capacity, 1)];
+        elements = new Object[Math.max(1, capacity)];
     }
 
     /**
-     * Inserts the specified element into the queue, returning {@code true} upon success.
-     * If there is no space available, it throws an {@code IllegalStateException}.
+     * Inserts the specified element into this queue if it is possible to do
+     * so immediately without violating capacity restrictions.
+     * When using a capacity-restricted queue, this method is generally
+     * preferable to {@link #add}, which can fail to insert an element only
+     * by throwing an exception.
      *
-     * @param e the element to be inserted.
-     * @return true if the element has been added to this queue.
-     * @throws IllegalStateException if the item cannot be added due to capacity restrictions.
-     */
-    @Override
-    public boolean add(E e) {
-        if (!offer(e))
-            throw new IllegalStateException("No free space");
-
-        return true;
-    }
-
-    /**
-     * Inserts the specified element into the queue, returning {@code true} upon success.
-     *
-     * @param e the element to be inserted.
-     * @return true if the element has been added to this queue, else false.
+     * @param e the element to add
+     * @return {@code true} if the element was added to this queue, else
+     * {@code false}
+     * @throws ClassCastException       if the class of the specified element
+     *                                  prevents it from being added to this queue
+     * @throws NullPointerException     if the specified element is null and
+     *                                  this queue does not permit null elements
+     * @throws IllegalArgumentException if some property of this element
+     *                                  prevents it from being added to this queue
      */
     @Override
     public boolean offer(E e) {
+        Objects.requireNonNull(e, "this queue does not permit null elements");
         if (size == elements.length)
             return false;
-        else {
-            elements[(head + size) % elements.length] = e;
-            size++;
-        }
 
+        elements[tail] = e;
+        tail = tail < elements.length - 1 ? tail + 1 : 0;
+        size++;
+        modCount++;
         return true;
     }
 
+
     /**
-     * Returns, but does not remove, the head of this queue.
-     * If the queue is empty, the method returns null.
+     * Retrieves and removes the head of this queue,
+     * or returns {@code null} if this queue is empty.
      *
-     * @return the head of this queue. If the queue is empty, the method returns null.
+     * @return the head of this queue, or {@code null} if this queue is empty
      */
     @Override
+    public E poll() {
+        if (size == 0)
+            return null;
+
+        @SuppressWarnings("unchecked")
+        E e = (E) elements[head];
+        elements[head] = null;
+        head = head < elements.length - 1 ? head + 1 : 0;
+        size--;
+        modCount++;
+        return e;
+    }
+
+    /**
+     * Retrieves, but does not remove, the head of this queue,
+     * or returns {@code null} if this queue is empty.
+     *
+     * @return the head of this queue, or {@code null} if this queue is empty
+     */
+
     @SuppressWarnings("unchecked")
+    @Override
     public E peek() {
         if (size == 0)
             return null;
@@ -100,32 +134,91 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
     }
 
     /**
-     * Returns and removes the head of this queue.
-     * If the queue is empty, the method returns null.
+     * Returns the number of elements in this collection.
      *
-     * @return the head of this queue. If the queue is empty, the method returns null.
-     */
-    @Override
-    public E poll() {
-        if (size == 0)
-            return null;
-        else {
-            @SuppressWarnings("unchecked")
-            E e = (E) elements[head];
-            elements[head] = null;
-            head = (head + 1) % elements.length;
-            size--;
-            return e;
-        }
-    }
-
-    /**
-     * Returns the number of items in the queue.
-     *
-     * @return the number of items in the queue.
+     * @return the number of elements in this collection
      */
     @Override
     public int size() {
         return size;
+    }
+
+    /**
+     * Returns an iterator over the elements contained in this collection.
+     *
+     * @return an iterator over the elements contained in this collection
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new QueueIterator();
+    }
+
+    private class QueueIterator implements Iterator<E> {
+
+        int diffHead = 0;
+        int lastRet = -1;
+        int expectedModCount = modCount;
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return diffHead != size;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public E next() {
+            checkForComodification();
+            if (diffHead == size)
+                throw new NoSuchElementException();
+            int cursor = head + diffHead;
+            lastRet = cursor < elements.length ? cursor : cursor - elements.length;
+            @SuppressWarnings("unchecked")
+            E e = (E) elements[lastRet];
+            diffHead++;
+            return e;
+        }
+
+        /**
+         * Removes from the underlying collection the last element returned
+         * by this iterator (optional operation).  This method can be called
+         * only once per call to {@link #next}.
+         * <p>
+         * The behavior of an iterator is unspecified if the underlying collection
+         * is modified while the iteration is in progress in any way other than by
+         * calling this method, unless an overriding class has specified a
+         * concurrent modification policy.
+         * <p>
+         * The behavior of an iterator is unspecified if this method is called
+         * after a call to the {@link #forEachRemaining forEachRemaining} method.
+         *
+         * @throws UnsupportedOperationException if the {@code remove}
+         *                                       operation is not supported by this iterator
+         * @throws IllegalStateException         if the {@code next} method has not
+         *                                       yet been called, or the {@code remove} method
+         *                                       has already
+         *                                       been called after the last call to the {@code next}
+         *                                       method
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove() is not supported");
+        }
+
+        private void checkForComodification() {
+            if (modCount != expectedModCount)
+                throw new IllegalStateException("the queue has been modified");
+        }
     }
 }

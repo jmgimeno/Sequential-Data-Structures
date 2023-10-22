@@ -1,92 +1,104 @@
 package queue;
 
-import java.util.LinkedList;
+import java.util.*;
 
 /**
- * Implementation of the {@link queue} interface using non-contiguous memory positions
- * through a {@link LinkedList}.
- * <p>
- * Methods are provided to insert an element at the end of the queue, to obtain or to obtain and
- * remove
- * the head of the queue, to know if the queue is empty and, to know the number of elements
- * in the collection.
+ * Implementation of the {@link Queue} interface backed by a {@link LinkedList} and
+ * not allowing {@code null} elements.
  *
- * @param <E> defines the type of the elements in the LinkedListBasedQueue
- * @author Juan Enrique and Juan Manuel
+ * <p>
+ * This implementation also shows how to use the abstract classes provided in the Java Collections
+ * Framework to simplify the implementation of a concrete class.
+ *
+ * @param <E> defines the type of the elements in the ArrayListBasedQueue
+ * @author Juan Manuel Gimeno
  */
 public class LinkedListBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
+
     /**
-     * The LinkedList in which the elements of the queue are stored.
+     * Underlying {@link LinkedList} for the elements of the queue
      */
     private final LinkedList<E> elements;
 
     /**
-     * Constructs an empty LinkedListBasedQueue.
+     * Cre
      */
     public LinkedListBasedQueue() {
         elements = new LinkedList<>();
     }
 
     /**
-     * Inserts the specified element into the queue, returning {@code true} upon success.
+     * Inserts the specified element into this queue if it is possible to do
+     * so immediately without violating capacity restrictions.
+     * When using a capacity-restricted queue, this method is generally
+     * preferable to {@link #add}, which can fail to insert an element only
+     * by throwing an exception.
      *
-     * @param e the element to be inserted.
-     * @return true when the element has been added to this queue.
-     */
-    @Override
-    public boolean add(E e) {
-        return offer(e);
-    }
-
-    /**
-     * Inserts the specified element into the queue, returning {@code true} upon success.
-     *
-     * @param e the element to be inserted.
-     * @return true when the element has been added to this queue.
+     * @param e the element to add
+     * @return {@code true} if the element was added to this queue, else
+     * {@code false}
+     * @throws ClassCastException       if the class of the specified element
+     *                                  prevents it from being added to this queue
+     * @throws NullPointerException     if the specified element is null and
+     *                                  this queue does not permit null elements
+     * @throws IllegalArgumentException if some property of this element
+     *                                  prevents it from being added to this queue
      */
     @Override
     public boolean offer(E e) {
+        Objects.requireNonNull(e, "this queue does not permit null elements");
         elements.addLast(e);
-
         return true;
     }
 
-
     /**
-     * Returns, but does not remove, the head of this queue.
-     * If the queue is empty, the method returns null.
+     * Retrieves and removes the head of this queue,
+     * or returns {@code null} if this queue is empty.
      *
-     * @return the head of this queue. If the queue is empty, the method returns null.
-     */
-    @Override
-    public E peek() {
-        if (elements.isEmpty())
-            return null;
-
-        return elements.getFirst();
-    }
-
-    /**
-     * Returns and removes the head of this queue.
-     * If the queue is empty, the method returns null.
-     *
-     * @return the head of this queue. If the queue is empty, the method returns null.
+     * @return the head of this queue, or {@code null} if this queue is empty
      */
     @Override
     public E poll() {
-        if (elements.isEmpty())
-            return null;
-        else
-            return elements.removeFirst();
+        return elements.pollFirst();
+    }
+    /**
+     * Retrieves, but does not remove, the head of this queue,
+     * or returns {@code null} if this queue is empty.
+     *
+     * @return the head of this queue, or {@code null} if this queue is empty
+     */
+    @Override
+    public E peek() {
+        return elements.peek();
     }
 
     /**
-     * Returns the number of items in the queue.
-     *
-     * @return the number of items in the queue.
+     * Returns the number of elements in this collection.
+     * @return the number of elements in this collection
      */
     @Override
     public int size() {
         return elements.size();
+    }
+
+    /**
+     * Returns an iterator over the elements contained in this collection.
+     *
+     * @return an iterator over the elements contained in this collection
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<>() {
+            private final Iterator<E> iterator = elements.iterator();
+            @Override
+            public boolean hasNext() {
+                    return iterator.hasNext();
+            }
+
+            @Override
+            public E next() {
+                return iterator.next();
+            }
+        };
     }
 }
