@@ -8,7 +8,7 @@ import java.util.Queue;
 
 /**
  * Implementation of the {@link Queue} interface using contiguous memory positions using a
- * fixes size array and not allowing {@code null} elements.
+ * fixed-size array and not allowing {@code null} elements.
  *
  * <p>
  * This implementation also shows how to use the abstract classes provided in the Java Collections
