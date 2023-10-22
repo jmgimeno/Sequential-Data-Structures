@@ -2,11 +2,10 @@ package queue;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class ArrayBasedQueueTest extends AbstractQueueTest {
+class ArrayBasedQueueTest extends QueueAbstractTest {
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         queue = new ArrayBasedQueue<>();
     }
-
 }

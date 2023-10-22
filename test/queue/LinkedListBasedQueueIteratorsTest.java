@@ -2,10 +2,11 @@ package queue;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class LinkedListBasedQueueTest extends QueueAbstractTest {
+class LinkedListBasedQueueIteratorsTest extends QueueIteratorAbstractTest {
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         queue = new LinkedListBasedQueue<>();
     }
+
 }
