@@ -215,12 +215,10 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
             if (lastRet < 0)
                 throw new IllegalStateException("you should call next() before remove()");
             if (head < tail) {
-                // 0 <= head  <= lastRet < tail <= elements.length
+                // 0 <= head  <= lastRet < tail < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
                 elements[tail] = null;
                 tail--;
-                diffHead--;
-                size--;
             } else if (head <= lastRet) {
                 // 0 <= tail <= head <= lastRet < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, elements.length - lastRet - 1);
@@ -228,16 +226,14 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
                 System.arraycopy(elements, 1, elements, 0, tail - 1);
                 elements[tail] = null;
                 tail = tail == 0 ? elements.length - 1 : tail - 1;
-                diffHead--;
-                size--;
             } else {
-                // 0 <= lastRet <= tail <= head < elements.length
+                // 0 <= lastRet < tail <= head < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
                 elements[tail] = null;
-                tail = tail == 0 ? elements.length - 1 : tail - 1;
-                diffHead--;
-                size--;
+                tail--;
             }
+            diffHead--;
+            size--;
             lastRet = -1;
             modCount++;
             expectedModCount++;
