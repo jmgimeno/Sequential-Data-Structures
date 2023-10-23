@@ -217,19 +217,23 @@ public class ArrayBasedQueue<E> extends AbstractQueue<E> implements Queue<E> {
             if (head < tail) {
                 // 0 <= head  <= lastRet < tail < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
-                elements[tail] = null;
+                elements[tail - 1] = null;
                 tail--;
             } else if (head <= lastRet) {
                 // 0 <= tail <= head <= lastRet < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, elements.length - lastRet - 1);
-                elements[elements.length - 1] = elements[0];
-                System.arraycopy(elements, 1, elements, 0, tail - 1);
-                elements[tail] = null;
-                tail = tail == 0 ? elements.length - 1 : tail - 1;
+                if (tail > 0) {
+                    elements[elements.length - 1] = elements[0];
+                    System.arraycopy(elements, 1, elements, 0, tail - 1);
+                    tail--;
+                } else {
+                    elements[elements.length - 1] = null;
+                    tail = elements.length - 1;
+                }
             } else {
                 // 0 <= lastRet < tail <= head < elements.length
                 System.arraycopy(elements, lastRet + 1, elements, lastRet, tail - lastRet - 1);
-                elements[tail] = null;
+                elements[tail - 1] = null;
                 tail--;
             }
             diffHead--;
